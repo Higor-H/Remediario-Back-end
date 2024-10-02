@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.edu.atitus.remediario.entities.UserEntity;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, UUID> {
+public interface LoginRepository extends JpaRepository<UserEntity, UUID> {
 
-
+	UserEntity findByEmail(String email);
 }

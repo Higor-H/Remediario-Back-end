@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.edu.atitus.remediario.entities.UserEntity;  // Ajuste se necessário
+import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.services.UserService;
 
 @RestController
