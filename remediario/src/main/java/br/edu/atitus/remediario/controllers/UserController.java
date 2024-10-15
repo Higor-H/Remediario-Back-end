@@ -15,24 +15,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        UserEntity savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/create")
-    public ResponseEntity<UserEntity> createUserByParams(
-        @RequestParam String email,
-        @RequestParam String password,
-        @RequestParam String name) {
-        
-        UserEntity user = new UserEntity();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setName(name);
-        
-        UserEntity savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<String> createUser(@RequestBody UserEntity user) {
+        try {
+            userService.saveUser(user);
+            return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
