@@ -11,7 +11,7 @@ import br.edu.atitus.remediario.dtos.LoginDtos;
 import br.edu.atitus.remediario.services.LoginService;
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/login")
 public class LoguinController {
 
     @Autowired

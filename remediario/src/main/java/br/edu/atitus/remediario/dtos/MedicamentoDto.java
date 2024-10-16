@@ -5,7 +5,7 @@ public class MedicamentoDto {
     
     private String nome;
     private String dosagem;
-    private String tipo; // Por exemplo, líquido ou comprimido
+    private String tipo;
     private int quantidade;
 	private String descricao;
 
@@ -19,7 +19,6 @@ public class MedicamentoDto {
         this.quantidade = quantidade;
     }
 
-    // Getters e Setters
     public String getDescricao() {
 		return descricao;
 	}

@@ -6,18 +6,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "users") // Nome da tabela alterado para evitar conflitos com palavras reservadas
+@Table(name = "users")
 public class UserEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
-    )
+   
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
@@ -33,7 +32,6 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    // Getters e Setters
     public UUID getId() {
         return id;
     }
@@ -45,9 +43,8 @@ public class UserEntity {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
-        this.email = email;
+    	this.email = email;
     }
 
     public String getPassword() {

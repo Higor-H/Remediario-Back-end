@@ -1,9 +1,13 @@
-package br.edu.atitus.remediario.model;
+package br.edu.atitus.remediario.models;
 
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+
+
 
 @Entity
 public class User {
@@ -12,6 +16,9 @@ public class User {
 	private UUID id;
     private String username;
     private String password;
+    @NotEmpty(message = "insira um email valido")
+    @Email
+    private String email;
     
 	public UUID getId() {
 		return id;
@@ -31,6 +38,9 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	public String getEmail() {
+		return email;
+	}
+	
 	
 }

@@ -1,14 +1,14 @@
 package br.edu.atitus.remediario.controllers;
 
 import br.edu.atitus.remediario.dtos.MedicamentoDto;
-import br.edu.atitus.remediario.model.Medicamento;
+import br.edu.atitus.remediario.models.Medicamento;
 import br.edu.atitus.remediario.services.MedicamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping
 public class MedicamentoController {
 
     @Autowired
@@ -21,8 +21,8 @@ public class MedicamentoController {
         medicamento.setDosagem(medicamentoDto.getDosagem());
         medicamento.setTipo(medicamentoDto.getTipo());
         medicamento.setQuantidade(medicamentoDto.getQuantidade());
-        medicamento.setDescricao(medicamentoDto.getDescricao()); // Aqui está a linha que deve garantir que descricao não seja nula
-
+        medicamento.setDescricao(medicamentoDto.getDescricao());
+        
         Medicamento savedMedicamento = medicamentoService.saveMedicamento(medicamento);
         return ResponseEntity.ok(savedMedicamento);
     }

@@ -25,7 +25,6 @@ public class MedicamentoEntity {
 
     public MedicamentoEntity() {}
 
-    // Getters e Setters
     public UUID getId() {
         return id;
     }

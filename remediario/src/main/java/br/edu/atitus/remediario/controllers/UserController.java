@@ -9,7 +9,7 @@ import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.services.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -17,11 +17,15 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> createUser(@RequestBody UserEntity user) {
-        try {
-            userService.saveUser(user);
-            return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        
+        	if (user.getEmail().contains("@")) {
+        		userService.saveUser(user);
+        		return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
+        	}
+            
+        	else {
+            return new ResponseEntity<>("Error creating user", HttpStatus.BAD_REQUEST);
+        	}
+    
     }
 }

@@ -1,4 +1,4 @@
-package br.edu.atitus.remediario.model;
+package br.edu.atitus.remediario.models;
 
 import jakarta.persistence.*;
 import java.util.UUID;
@@ -24,9 +24,8 @@ public class Medicamento {
     private int quantidade;
 
     @Column
-    private String tipo; // Por exemplo, líquido ou comprimido
+    private String tipo;
 
-    // Getters e Setters
     public UUID getId() {
         return id;
     }
