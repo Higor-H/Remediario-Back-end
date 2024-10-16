@@ -17,15 +17,13 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> createUser(@RequestBody UserEntity user) {
-        
-        	if (user.getEmail().contains("@")) {
-        		userService.saveUser(user);
-        		return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
-        	}
-            
-        	else {
-            return new ResponseEntity<>("Error creating user", HttpStatus.BAD_REQUEST);
-        	}
-    
+        try {
+            userService.saveUser(user);
+            return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Unexpected error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

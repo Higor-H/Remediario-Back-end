@@ -12,6 +12,13 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserEntity saveUser(UserEntity user) {
+        validarEmail(user.getEmail());
         return userRepository.save(user);
+    }
+
+    private void validarEmail(String email) {
+        if (email == null || !email.contains("@") || !email.contains(".")) {
+            throw new IllegalArgumentException("Email inválido! O email deve conter '@' e um domínio.");
+        }
     }
 }
