@@ -22,6 +22,9 @@ public class MedicamentoEntity {
 
     @Column(nullable = false)
     private int quantidade;
+    
+    @Column(nullable = false)
+    private String descricao;
 
     public MedicamentoEntity() {}
 
@@ -64,4 +67,13 @@ public class MedicamentoEntity {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+    
 }
