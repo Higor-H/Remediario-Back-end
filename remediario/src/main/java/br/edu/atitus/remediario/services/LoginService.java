@@ -1,7 +1,9 @@
 package br.edu.atitus.remediario.services;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.LoginRepository;
 
@@ -15,4 +17,5 @@ public class LoginService {
         UserEntity user = loginRepository.findByEmail(email);
         return user != null && user.getPassword().equals(password);
     }
+    
 }

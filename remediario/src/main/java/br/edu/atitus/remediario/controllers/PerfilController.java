@@ -1,27 +1,39 @@
 package br.edu.atitus.remediario.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.atitus.remediario.dtos.PerfilDto;
 import br.edu.atitus.remediario.entities.PerfilEntity;
+import br.edu.atitus.remediario.entities.UserEntity;
+import br.edu.atitus.remediario.services.LoginService;
 import br.edu.atitus.remediario.services.PerfilService;
 
-@RestController
+@RestController("/perfil")
 public class PerfilController {
 	
 	   @Autowired
-	    private PerfilService perfilService;
-
-	    @PostMapping("/perfil")
-	    public ResponseEntity<PerfilEntity> createPerfil(@RequestBody PerfilDto perfilDto) {
-	        PerfilEntity perfilEntity = new PerfilEntity();
-	        perfilEntity.setName(perfilDto.getName());
+	   private PerfilService perfilService;
+	   //private UserEntity user;
+	   	
+	   //@GetMapping("/select")
+	   //public List<PerfilEntity> perfils(user){
+		   //perfilService.findByUser(user);
+	   //}
+	   	
+	   
+	   @PostMapping("/create")
+	   public ResponseEntity<PerfilEntity> createPerfil(@RequestBody PerfilDto perfilDto) {
+	       PerfilEntity perfilEntity = new PerfilEntity();
+	       perfilEntity.setName(perfilDto.getName());
 	        
-	        PerfilEntity savedPerfil = perfilService.savePerfil(perfilEntity);
-	        return ResponseEntity.ok(savedPerfil);
-	    }
+	       PerfilEntity savedPerfil = perfilService.savePerfil(perfilEntity);
+	       return ResponseEntity.ok(savedPerfil);
+	   }
 }

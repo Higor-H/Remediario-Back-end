@@ -18,7 +18,7 @@ public class PerfilEntity {
 	
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @Column(nullable = false)
