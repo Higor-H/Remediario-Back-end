@@ -1,62 +1,112 @@
 package br.edu.atitus.remediario.entities;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.checkerframework.common.aliasing.qual.Unique;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import br.edu.atitus.remediario.enums.UserRole;
+
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+@Data
 @Entity
-@Table(name = "users")
-public class UserEntity {
-
-    @Id
-    @GeneratedValue(generator = "UUID")
-   
-    @Column(name = "id", updatable = false, nullable = false)
+@Table(name = "TB_USERS")
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserEntity implements UserDetails {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @Column(nullable = false, unique = true)
+    @Unique
     private String email;
-
-    @Column(nullable = false)
     private String password;
+    private UserRole role;
 
-    @Column(nullable = false)
-    private String name;
-
-    public UserEntity() {
+    public UserEntity(String email, String encryptedPassword, UserRole role) {
+        this.email = email;
+        this.setPassword(encryptedPassword);
+        this.role = role;
     }
 
-    public UUID getId() {
-        return id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == UserRole.ADMIN) return List.of(
+                new SimpleGrantedAuthority(UserRole.ADMIN.name()),
+                new SimpleGrantedAuthority(UserRole.USER.name())
+        );
+
+        return List.of(new SimpleGrantedAuthority(UserRole.USER.name()));
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
+    @Override
+    public String getUsername() {
         return email;
     }
-    public void setEmail(String email) {
-    	this.email = email;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public String getPassword() {
-        return password;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
 }

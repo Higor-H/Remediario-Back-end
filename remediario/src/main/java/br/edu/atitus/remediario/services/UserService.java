@@ -20,18 +20,17 @@ public class UserService {
     
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
-    public UserEntity saveUser(UserEntity user) {
-        validarEmail(user.getEmail());
-        validarSenha(user.getPassword());
-        userRepository.save(user);
-        var perfis = perfilService.findByUser(user);
+    public UserEntity saveUser(UserEntity userEntity) {
+        validarEmail(userEntity.getEmail());
+        validarSenha(userEntity.getPassword());
+        userRepository.save(userEntity);
+        var perfis = perfilService.findByUser(userEntity);
         if (perfis.isEmpty()) {
         	PerfilEntity perfil = new PerfilEntity();
-        	perfil.setUser(user);
-        	perfil.setName(user.getName());
+        	perfil.setUser(userEntity);
         	perfilService.savePerfil(perfil);
         }
-        return user;
+        return userEntity;
     }
     
     private void validarSenha (String senha) {

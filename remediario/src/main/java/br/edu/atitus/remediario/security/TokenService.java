@@ -20,12 +20,12 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(UserEntity userModel) {
+    public String generateToken(UserEntity userEntity) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("auth-api")
-                    .withSubject(userModel.getEmail())
+                    .withSubject(userEntity.getEmail())
                     .withExpiresAt(expireDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
