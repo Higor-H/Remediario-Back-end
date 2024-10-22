@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "medicamento")
+@Table(name = "tb_medicamento")
 public class MedicamentoEntity {
 
     @Id
@@ -30,10 +30,6 @@ public class MedicamentoEntity {
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getNome() {
