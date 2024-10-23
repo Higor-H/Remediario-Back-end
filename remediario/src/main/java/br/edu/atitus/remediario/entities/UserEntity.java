@@ -1,91 +1,41 @@
+
 package br.edu.atitus.remediario.entities;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.checkerframework.common.aliasing.qual.Unique;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import br.edu.atitus.remediario.enums.UserRole;
-
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
-@Data
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 @Entity
-@Table(name = "TB_USERS")
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserEntity implements UserDetails {
-
-	private static final long serialVersionUID = 1L;
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@Table(name = "tb_user")
+public class UserEntity {
+	
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Column(name = "uuid", updatable = false, nullable = false)
     private UUID id;
-    @Unique
+
+    @Column(nullable = false)
     private String email;
+    
+    @Column(nullable = false)
     private String password;
-    private UserRole role;
+    
 
-    public UserEntity(String email, String encryptedPassword, UserRole role) {
-        this.email = email;
-        this.setPassword(encryptedPassword);
-        this.role = role;
+    
+    public UserEntity() {
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRole.ADMIN) return List.of(
-                new SimpleGrantedAuthority(UserRole.ADMIN.name()),
-                new SimpleGrantedAuthority(UserRole.USER.name())
-        );
-
-        return List.of(new SimpleGrantedAuthority(UserRole.USER.name()));
+    public UUID getId() {
+        return id;
     }
 
-    @Override
-    public String getUsername() {
-        return email;
+    public void setId(UUID id) {
+        this.id = id;
     }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public String getEmail() {
 		return email;
@@ -95,16 +45,12 @@ public class UserEntity implements UserDetails {
 		this.email = email;
 	}
 
-	public UserRole getRole() {
-		return role;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setRole(UserRole role) {
-		this.role = role;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
 }

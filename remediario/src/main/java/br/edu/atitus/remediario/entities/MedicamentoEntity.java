@@ -1,14 +1,21 @@
+
 package br.edu.atitus.remediario.entities;
 
-import jakarta.persistence.*;
 import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_medicamento")
 public class MedicamentoEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	@Id
+    @GeneratedValue(generator = "UUID")
+	@Column(name = "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @Column(nullable = false)
@@ -26,43 +33,49 @@ public class MedicamentoEntity {
     @Column(nullable = false)
     private String descricao;
 
-    public MedicamentoEntity() {}
+    
+    public MedicamentoEntity() {
+    }
 
     public UUID getId() {
         return id;
     }
 
-    public String getNome() {
-        return nome;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public String getDosagem() {
-        return dosagem;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public void setDosagem(String dosagem) {
-        this.dosagem = dosagem;
-    }
+	public String getDosagem() {
+		return dosagem;
+	}
 
-    public String getTipo() {
-        return tipo;
-    }
+	public void setDosagem(String dosagem) {
+		this.dosagem = dosagem;
+	}
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+	public String getTipo() {
+		return tipo;
+	}
 
-    public int getQuantidade() {
-        return quantidade;
-    }
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
 
 	public String getDescricao() {
 		return descricao;
@@ -71,5 +84,5 @@ public class MedicamentoEntity {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-    
+
 }

@@ -1,11 +1,10 @@
 package br.edu.atitus.remediario.controllers;
 
 import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,30 +20,27 @@ import br.edu.atitus.remediario.security.TokenService;
 @RestController()
 @RequestMapping("auth")
 public class AuthenticationController {
+	
+	@Autowired
+    private UserRepository userRepository;
+	@Autowired
+    private TokenService tokenService;
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final TokenService tokenService;
-
-    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService){
-        this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
-        this.userRepository = userRepository;
-    }
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationRequestDTO.email(), authenticationRequestDTO.password());
-        var auth = authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
+        UserEntity user = new UserEntity();
+        var token = tokenService.generateToken(user);
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
-        if(userRepository.findByEmail(registerRequestDTO.email()) != null) return ResponseEntity.badRequest().build();
+        if(userRepository.findByEmail(registerRequestDTO.email()) != null)
+        	return ResponseEntity.badRequest().build();
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequestDTO.password());
-        UserEntity user = new UserEntity(registerRequestDTO.email(), encryptedPassword, registerRequestDTO.role());
+        UserEntity user = new UserEntity();
+        user.setEmail(registerRequestDTO.email());
+        user.setPassword(registerRequestDTO.password());
 
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
