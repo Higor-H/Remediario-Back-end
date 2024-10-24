@@ -24,12 +24,23 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
     
+    @Column(nullable = false)
+    private String name;
+    
 
     
     public UserEntity() {
     }
 
-    public UUID getId() {
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public UUID getId() {
         return id;
     }
 

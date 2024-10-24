@@ -16,6 +16,7 @@ import br.edu.atitus.remediario.dtos.LoginResponseDTO;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.UserRepository;
 import br.edu.atitus.remediario.security.TokenService;
+import br.edu.atitus.remediario.services.UserService;
 
 @RestController()
 @RequestMapping("auth")
@@ -25,6 +26,8 @@ public class AuthenticationController {
     private UserRepository userRepository;
 	@Autowired
     private TokenService tokenService;
+	@Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
@@ -41,8 +44,9 @@ public class AuthenticationController {
         UserEntity user = new UserEntity();
         user.setEmail(registerRequestDTO.email());
         user.setPassword(registerRequestDTO.password());
+        user.setName(registerRequestDTO.name());
 
-        userRepository.save(user);
+        userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
