@@ -31,20 +31,27 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
-        UserEntity user = new UserEntity();
+        UserEntity user = userRepository.findByEmail(authenticationRequestDTO.email())
+                .orElse(null);
+
+        if (user == null || !user.getPassword().equals(authenticationRequestDTO.password())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
+
         var token = tokenService.generateToken(user);
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
-        if(userRepository.findByEmail(registerRequestDTO.email()) != null)
-        	return ResponseEntity.badRequest().build();
+        if (userRepository.findByEmail(registerRequestDTO.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email já registrado");
+        }
 
         UserEntity user = new UserEntity();
-        user.setEmail(registerRequestDTO.email());
-        user.setPassword(registerRequestDTO.password());
-        user.setName(registerRequestDTO.name());
+        user.setEmail(registerRequestDTO.getEmail());
+        user.setPassword(registerRequestDTO.getPassword());
+        user.setName(registerRequestDTO.getName());
 
         userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
