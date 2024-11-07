@@ -35,7 +35,7 @@ public class AuthenticationController {
                 .orElse(null);
 
         if (user == null || !user.getPassword().equals(authenticationRequestDTO.password())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha invalidos");
         }
 
         var token = tokenService.generateToken(user);
@@ -53,7 +53,12 @@ public class AuthenticationController {
         user.setPassword(registerRequestDTO.getPassword());
         user.setName(registerRequestDTO.getName());
 
-        userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        try {
+        	userService.saveUser(user);
+        	return new ResponseEntity<>("Usuario criado com sucesso", HttpStatus.CREATED);
+		} catch (Exception e) {
+			 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+        
     }
 }
