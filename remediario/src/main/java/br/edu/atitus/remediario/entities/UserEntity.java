@@ -1,11 +1,12 @@
 
 package br.edu.atitus.remediario.entities;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -19,6 +20,12 @@ import jakarta.persistence.Table;
 public class UserEntity implements UserDetails {
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+	    return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
+
 
 	@Id
     @GeneratedValue(generator = "UUID")
@@ -33,11 +40,6 @@ public class UserEntity implements UserDetails {
     
     @Column(nullable = false)
     private String name;
-    
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
-    }
 
     @Override
     public String getPassword() {

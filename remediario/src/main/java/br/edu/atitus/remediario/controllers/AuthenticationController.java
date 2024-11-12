@@ -55,7 +55,7 @@ public class AuthenticationController {
 
         try {
         	userService.saveUser(user);
-        	return new ResponseEntity<>("Usuario criado com sucesso", HttpStatus.CREATED);
+        	return new ResponseEntity<>("Usuário criado com sucesso", HttpStatus.CREATED);
 		} catch (Exception e) {
 			 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

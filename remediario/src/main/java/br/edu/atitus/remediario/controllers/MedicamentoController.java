@@ -5,16 +5,18 @@ import br.edu.atitus.remediario.entities.MedicamentoEntity;
 import br.edu.atitus.remediario.services.MedicamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
+@RequestMapping("/medicamentos")
 public class MedicamentoController {
 
     @Autowired
     private MedicamentoService medicamentoService;
-
-    @PostMapping("/medicamentos")
+    
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/novo")
     public ResponseEntity<MedicamentoEntity> createMedicamento(@RequestBody MedicamentoDto medicamentoDto) {
         MedicamentoEntity medicamento = new MedicamentoEntity();
         medicamento.setNome(medicamentoDto.getNome());
