@@ -26,6 +26,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(userEntity.getEmail())
+                    .withClaim("userId", userEntity.getId().toString())
                     .withExpiresAt(expireDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
@@ -33,14 +34,29 @@ public class TokenService {
         }
     }
 
-    public String validateToken(String token) {
+    // Método que valida o token sem retornar o ID diretamente
+    public boolean validateToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token);
+            return true;
+        } catch (JWTVerificationException exception) {
+            return false;
+        }
+    }
+
+    // Método que extrai o userId do token
+    public String getUserIdFromToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer("auth-api")
                     .build()
                     .verify(token)
-                    .getSubject();
+                    .getClaim("userId").asString();
         } catch (JWTVerificationException exception) {
             return null;
         }

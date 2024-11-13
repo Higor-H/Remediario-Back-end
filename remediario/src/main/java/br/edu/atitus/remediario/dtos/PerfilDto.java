@@ -3,6 +3,10 @@ package br.edu.atitus.remediario.dtos;
 public class PerfilDto {
 	
 	private String name;
+	
+	public PerfilDto() {
+		
+	}
 
 	public String getName() {
 		return name;
