@@ -1,6 +1,6 @@
 package br.edu.atitus.remediario.controllers;
 
-import br.edu.atitus.remediario.dtos.MedicamentoDto;
+import br.edu.atitus.remediario.dtos.request.MedicamentoRequestDTO;
 import br.edu.atitus.remediario.entities.MedicamentoEntity;
 import br.edu.atitus.remediario.services.MedicamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class MedicamentoController {
     
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/novo")
-    public ResponseEntity<MedicamentoEntity> createMedicamento(@RequestBody MedicamentoDto medicamentoDto) {
+    public ResponseEntity<MedicamentoEntity> createMedicamento(@RequestBody MedicamentoRequestDTO medicamentoDto) {
         MedicamentoEntity medicamento = new MedicamentoEntity();
         medicamento.setNome(medicamentoDto.getNome());
         medicamento.setDosagem(medicamentoDto.getDosagem());

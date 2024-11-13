@@ -1,7 +1,7 @@
 package br.edu.atitus.remediario.controllers;
 
-import br.edu.atitus.remediario.dtos.PerfilDto;
-import br.edu.atitus.remediario.dtos.PerfilResponseDto;
+import br.edu.atitus.remediario.dtos.request.PerfilRequestDTO;
+import br.edu.atitus.remediario.dtos.response.PerfilResponseDTO;
 import br.edu.atitus.remediario.entities.PerfilEntity;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.UserRepository;
@@ -32,12 +32,12 @@ public class PerfilController {
     private UserRepository userRepository;
     
     @GetMapping("/select")
-    public ResponseEntity<List<PerfilResponseDto>> getUserProfiles() {
+    public ResponseEntity<List<PerfilResponseDTO>> getUserProfiles() {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<PerfilEntity> userProfiles = perfilService.getProfilesByUserId(currentUser.getId());
 
-        List<PerfilResponseDto> response = userProfiles.stream()
-                .map(perfil -> new PerfilResponseDto(perfil.getId(), perfil.getName()))
+        List<PerfilResponseDTO> response = userProfiles.stream()
+                .map(perfil -> new PerfilResponseDTO(perfil.getId(), perfil.getName()))
                 .toList();
 
         return ResponseEntity.ok(response);
@@ -45,7 +45,7 @@ public class PerfilController {
     
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
-    public ResponseEntity<PerfilResponseDto> createPerfil(@RequestBody PerfilDto perfilDto, HttpServletRequest request) {
+    public ResponseEntity<PerfilResponseDTO> createPerfil(@RequestBody PerfilRequestDTO perfilDto, HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         String userId = tokenService.getUserIdFromToken(token);
         if (userId == null) {
@@ -63,7 +63,7 @@ public class PerfilController {
         PerfilEntity savedPerfil = perfilService.savePerfil(perfilEntity);
 
         // Criar o PerfilResponseDto para a resposta
-        PerfilResponseDto responseDto = new PerfilResponseDto(perfilEntity.getId(), perfilEntity.getName());
+        PerfilResponseDTO responseDto = new PerfilResponseDTO(perfilEntity.getId(), perfilEntity.getName());
         responseDto.setId(savedPerfil.getId());
         responseDto.setName(savedPerfil.getName());
 

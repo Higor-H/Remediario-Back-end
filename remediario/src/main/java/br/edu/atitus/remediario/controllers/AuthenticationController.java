@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.atitus.remediario.dtos.AuthenticationRequestDTO;
-import br.edu.atitus.remediario.dtos.RegisterRequestDTO;
-import br.edu.atitus.remediario.dtos.LoginResponseDTO;
+import br.edu.atitus.remediario.dtos.request.AuthenticationRequestDTO;
+import br.edu.atitus.remediario.dtos.request.RegisterRequestDTO;
+import br.edu.atitus.remediario.dtos.response.LoginResponseDTO;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.UserRepository;
 import br.edu.atitus.remediario.security.TokenService;

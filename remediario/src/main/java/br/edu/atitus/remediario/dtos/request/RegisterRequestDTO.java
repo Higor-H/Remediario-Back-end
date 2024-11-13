@@ -1,4 +1,4 @@
-package br.edu.atitus.remediario.dtos;
+package br.edu.atitus.remediario.dtos.request;
 
 import jakarta.validation.constraints.NotBlank;
 

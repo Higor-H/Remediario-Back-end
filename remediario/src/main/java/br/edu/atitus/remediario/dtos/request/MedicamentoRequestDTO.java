@@ -1,7 +1,7 @@
-package br.edu.atitus.remediario.dtos;
+package br.edu.atitus.remediario.dtos.request;
 
 
-public class MedicamentoDto {
+public class MedicamentoRequestDTO {
     
     private String nome;
     private String dosagem;
@@ -9,9 +9,9 @@ public class MedicamentoDto {
     private int quantidade;
 	private String descricao;
 
-    public MedicamentoDto() {}
+    public MedicamentoRequestDTO() {}
 
-    public MedicamentoDto( String nome, String dosagem, String tipo, int quantidade) {
+    public MedicamentoRequestDTO( String nome, String dosagem, String tipo, int quantidade) {
         
         this.nome = nome;
         this.dosagem = dosagem;
