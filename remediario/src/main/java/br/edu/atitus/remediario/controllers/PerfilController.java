@@ -45,7 +45,7 @@ public class PerfilController {
     
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
-    public ResponseEntity<PerfilEntity> createPerfil(@RequestBody PerfilDto perfilDto, HttpServletRequest request) {
+    public ResponseEntity<PerfilResponseDto> createPerfil(@RequestBody PerfilDto perfilDto, HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         String userId = tokenService.getUserIdFromToken(token);
         if (userId == null) {
@@ -61,6 +61,12 @@ public class PerfilController {
         perfilEntity.setName(perfilDto.getName());
         perfilEntity.setUser(user);
         PerfilEntity savedPerfil = perfilService.savePerfil(perfilEntity);
-        return ResponseEntity.ok(savedPerfil);
+
+        // Criar o PerfilResponseDto para a resposta
+        PerfilResponseDto responseDto = new PerfilResponseDto(perfilEntity.getId(), perfilEntity.getName());
+        responseDto.setId(savedPerfil.getId());
+        responseDto.setName(savedPerfil.getName());
+
+        return ResponseEntity.ok(responseDto);
     }
 }
