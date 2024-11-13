@@ -2,12 +2,12 @@ package br.edu.atitus.remediario.dtos.response;
 
 import java.util.UUID;
 
-public class PerfilResponseDTO {
+public class ProfileResponseDTO {
 	
 	private UUID id;
     private String name;
 
-    public PerfilResponseDTO(UUID id, String name) {
+    public ProfileResponseDTO(UUID id, String name) {
         this.id = id;
         this.name = name;
     }

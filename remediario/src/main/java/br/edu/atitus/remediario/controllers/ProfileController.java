@@ -1,12 +1,12 @@
 package br.edu.atitus.remediario.controllers;
 
-import br.edu.atitus.remediario.dtos.request.PerfilRequestDTO;
-import br.edu.atitus.remediario.dtos.response.PerfilResponseDTO;
-import br.edu.atitus.remediario.entities.PerfilEntity;
+import br.edu.atitus.remediario.dtos.request.ProfileRequestDTO;
+import br.edu.atitus.remediario.dtos.response.ProfileResponseDTO;
+import br.edu.atitus.remediario.entities.ProfileEntity;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.UserRepository;
 import br.edu.atitus.remediario.security.TokenService;
-import br.edu.atitus.remediario.services.PerfilService;
+import br.edu.atitus.remediario.services.ProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/profiles")
-public class PerfilController {
+public class ProfileController {
     
     @Autowired
-    private PerfilService perfilService;
+    private ProfileService perfilService;
     
     @Autowired
     private TokenService tokenService;
@@ -31,13 +31,28 @@ public class PerfilController {
     @Autowired
     private UserRepository userRepository;
     
-    @GetMapping("/select")
-    public ResponseEntity<List<PerfilResponseDTO>> getUserProfiles() {
+    @PostMapping("/select/{perfilId}")
+    public ResponseEntity<String> selectProfile(@PathVariable UUID perfilId) {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<PerfilEntity> userProfiles = perfilService.getProfilesByUserId(currentUser.getId());
 
-        List<PerfilResponseDTO> response = userProfiles.stream()
-                .map(perfil -> new PerfilResponseDTO(perfil.getId(), perfil.getName()))
+        ProfileEntity selectedProfile = perfilService.getProfileById(perfilId);
+        if (selectedProfile == null || !selectedProfile.getUser().getId().equals(currentUser.getId())) {
+            return ResponseEntity.status(403).body("Perfil não encontrado ou não pertence ao usuário atual.");
+        }
+
+        currentUser.setCurrentProfileId(perfilId);
+        userRepository.save(currentUser);
+
+        return ResponseEntity.ok("Perfil selecionado com sucesso!");
+    }
+    
+    @GetMapping("/select")
+    public ResponseEntity<List<ProfileResponseDTO>> getUserProfiles() {
+        UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<ProfileEntity> userProfiles = perfilService.getProfilesByUserId(currentUser.getId());
+
+        List<ProfileResponseDTO> response = userProfiles.stream()
+                .map(perfil -> new ProfileResponseDTO(perfil.getId(), perfil.getName()))
                 .toList();
 
         return ResponseEntity.ok(response);
@@ -45,7 +60,7 @@ public class PerfilController {
     
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
-    public ResponseEntity<PerfilResponseDTO> createPerfil(@RequestBody PerfilRequestDTO perfilDto, HttpServletRequest request) {
+    public ResponseEntity<ProfileResponseDTO> createPerfil(@RequestBody ProfileRequestDTO perfilDto, HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         String userId = tokenService.getUserIdFromToken(token);
         if (userId == null) {
@@ -57,13 +72,12 @@ public class PerfilController {
         if (user == null) {
             return ResponseEntity.status(404).body(null);
         }
-        PerfilEntity perfilEntity = new PerfilEntity();
+        ProfileEntity perfilEntity = new ProfileEntity();
         perfilEntity.setName(perfilDto.getName());
         perfilEntity.setUser(user);
-        PerfilEntity savedPerfil = perfilService.savePerfil(perfilEntity);
+        ProfileEntity savedPerfil = perfilService.savePerfil(perfilEntity);
 
-        // Criar o PerfilResponseDto para a resposta
-        PerfilResponseDTO responseDto = new PerfilResponseDTO(perfilEntity.getId(), perfilEntity.getName());
+        ProfileResponseDTO responseDto = new ProfileResponseDTO(perfilEntity.getId(), perfilEntity.getName());
         responseDto.setId(savedPerfil.getId());
         responseDto.setName(savedPerfil.getName());
 

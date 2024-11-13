@@ -40,6 +40,8 @@ public class UserEntity implements UserDetails {
     
     @Column(nullable = false)
     private String name;
+    
+    private UUID currentProfileId;
 
     @Override
     public String getPassword() {
@@ -100,6 +102,14 @@ public class UserEntity implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UUID getCurrentProfileId() {
+		return currentProfileId;
+	}
+
+	public void setCurrentProfileId(UUID currentProfileId) {
+		this.currentProfileId = currentProfileId;
 	}
 	
 	

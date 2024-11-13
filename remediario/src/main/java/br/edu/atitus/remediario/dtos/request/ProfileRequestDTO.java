@@ -1,10 +1,10 @@
 package br.edu.atitus.remediario.dtos.request;
 
-public class PerfilRequestDTO {
+public class ProfileRequestDTO {
 	
 	private String name;
 	
-	public PerfilRequestDTO() {
+	public ProfileRequestDTO() {
 		
 	}
 

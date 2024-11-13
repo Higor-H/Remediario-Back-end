@@ -13,8 +13,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_perfil")
-public class PerfilEntity {
+@Table(name = "tb_profile")
+public class ProfileEntity {
 	
     @Id
     @GeneratedValue(generator = "UUID")
@@ -25,11 +25,11 @@ public class PerfilEntity {
     private String name;
     
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     
-    public PerfilEntity() {
+    public ProfileEntity() {
     }
 
     public UUID getId() {
