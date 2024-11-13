@@ -12,4 +12,7 @@ import br.edu.atitus.remediario.entities.UserEntity;
 public interface PerfilRepository extends JpaRepository<PerfilEntity, UUID>{
 
 	List<PerfilEntity> findByUser(UserEntity user);
+	
+	List<PerfilEntity> findAllByUserId(UUID userId);
+	
 }

@@ -1,6 +1,7 @@
 package br.edu.atitus.remediario.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,10 @@ public class PerfilService {
     public List<PerfilEntity> findByUser(UserEntity user) {
     	return perfilRepository.findByUser(user);
     }
+    
+    public List<PerfilEntity> getProfilesByUserId(UUID userId) {
+        return perfilRepository.findAllByUserId(userId);
+    }
+
 }
 
