@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.atitus.remediario.dtos.request.AuthenticationRequestDTO;
 import br.edu.atitus.remediario.dtos.request.RegisterRequestDTO;
 import br.edu.atitus.remediario.dtos.response.LoginResponseDTO;
+import br.edu.atitus.remediario.dtos.response.RegisterResponseDTO;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.UserRepository;
 import br.edu.atitus.remediario.security.TokenService;
@@ -30,15 +31,15 @@ public class AuthenticationController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
         UserEntity user = userRepository.findByEmail(authenticationRequestDTO.email())
                 .orElse(null);
 
         if (user == null || !user.getPassword().equals(authenticationRequestDTO.password())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha invalidos");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        var token = tokenService.generateToken(user);
+        String token = tokenService.generateToken(user);
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
@@ -55,7 +56,8 @@ public class AuthenticationController {
 
         try {
         	userService.saveUser(user);
-        	return new ResponseEntity<>("Usuário criado com sucesso", HttpStatus.CREATED);
+        	RegisterResponseDTO responseDto = new RegisterResponseDTO(user.getEmail(),user.getName());
+        	return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 		} catch (Exception e) {
 			 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
