@@ -87,32 +87,72 @@ Authorization: Bearer <TOKEN>
 Exemplos de Uso:
 Registro de Usuário (cURL)
 POST http://localhost:8080/auth/register
-"Content-Type: application/json"
-{
-  "email": "user@email.com", 
-  "password": "Senha@123", 
-  "name": "Usuário"
-} 
+ method: 'POST',
+        headers: 
+          {
+            'Content-Type': 'application/json',
+          },
+        body:
+          {
+            "email": "user@email.com", 
+            "password": "Senha@123", 
+            "name": "Usuário"
+          } 
 
 Login de Usuário (cURL)
 POST http://localhost:8080/auth/login
-"Content-Type: application/json"
-{
-  "email": "user@email.com", 
-  "password": "Senha@123"
-}
+method: 'POST',
+        headers: 
+          {
+            'Content-Type': 'application/json',
+          },
+        body:
+          {
+            email: name,
+            password: password,
+          }
 
 Listagem de Perfis (cURL)
-GET http://localhost:8080/profiles
-"Authorization: Bearer <TOKEN>" 
+GET http://localhost:8080/profiles/select
+ method: 'GET',
+          headers: 
+            {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ${token}`, // Passa o token no header
+            }
+
+Selecionar um Perfil (cURL)
+GET http://localhost:8080/profiles/select/{perfilId}
+method: 'POST',
+        headers: 
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${token}`,
+          }
 
 Adicionar Medicamento
 POST http://localhost:8080/medicamento/create
-"Authorization: Bearer <TOKEN>"
-"Content-Type: application/json"
-{
-  "nome": "Paracetamol", 
-  "quantidade": 10,
-  "dosagem": "10mg",
-  "tipo": "comprimido"
-}
+method: 'POST',
+        headers: 
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${token}`,
+            'Active-Profile': userId, // Passando o ID do perfil
+          },
+        body:
+          {
+            "nome": "Paracetamol", 
+            "quantidade": 10,
+            "dosagem": "10mg",
+            "tipo": "comprimido"
+          }
+
+Listagem de medicamentos (cURL)
+GET http://localhost:8080/medicamento/list
+method: 'GET',
+        headers: 
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${token}`,
+            'Active-Profile': profileId, 
+          }
