@@ -32,20 +32,21 @@ public class ProfileController {
     private UserRepository userRepository;
     
     @PostMapping("/select/{perfilId}")
-    public ResponseEntity<String> selectProfile(@PathVariable UUID perfilId) {
+    public ResponseEntity<UserEntity> selectProfile(@PathVariable UUID perfilId) {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         ProfileEntity selectedProfile = perfilService.getProfileById(perfilId);
         if (selectedProfile == null || !selectedProfile.getUser().getId().equals(currentUser.getId())) {
-            return ResponseEntity.status(403).body("Perfil não encontrado ou não pertence ao usuário atual.");
+            return ResponseEntity.status(403).body(null);
         }
 
         currentUser.setCurrentProfileId(perfilId);
         userRepository.save(currentUser);
 
-        return ResponseEntity.ok("Perfil selecionado com sucesso!");
+        return ResponseEntity.ok(currentUser);
     }
     
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/select")
     public ResponseEntity<List<ProfileResponseDTO>> getUserProfiles() {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -27,8 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, java.io.IOException {
-        var token = recoverToken(request);
-        if (token != null && tokenService.validateToken(token)) { // Valida o token primeiro
+        var token = recoverToken(request);        if (token != null && tokenService.validateToken(token)) { // Valida o token primeiro
             var userId = tokenService.getUserIdFromToken(token);  // Extrai o userId a partir do token
             if (userId != null) {
                 var optionalUser = userRepository.findById(UUID.fromString(userId));
