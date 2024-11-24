@@ -30,6 +30,7 @@ public class UserService implements UserDetailsService{
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     
     public void deleteUser(UUID userId) {
+    	perfilService.deleteProfile(userId);
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o ID: " + userId));
         userRepository.delete(user);

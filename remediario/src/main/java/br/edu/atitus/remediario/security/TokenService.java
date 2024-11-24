@@ -58,7 +58,6 @@ public class TokenService {
                     .verify(token)
                     .getClaim("userId").asString();
         } catch (JWTVerificationException exception) {
-        	System.out.println("Caiu no catch");
             return null;
         }
     }

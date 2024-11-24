@@ -45,13 +45,7 @@ public class AuthenticationController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 		}
     	var user = userService.loadUserByUsername(authenticationRequestDTO.email());
-        //UserEntity user = userRepository.findByEmail(authenticationRequestDTO.email())
-        //        .orElse(null);
-
-        //if (user == null || !user.getPassword().equals(authenticationRequestDTO.password())) {
-        //    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        //}
-    	
+  
         String token = tokenService.generateToken((UserEntity) user);
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
@@ -78,7 +72,7 @@ public class AuthenticationController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String token) {
-        String userId = tokenService.getUserIdFromToken(token);
+        String userId = tokenService.getUserIdFromToken(token.replace("Bearer ", ""));
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
         }

@@ -51,7 +51,7 @@ public class ProfileController {
     public ResponseEntity<List<ProfileResponseDTO>> getUserProfiles() {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<ProfileEntity> userProfiles = perfilService.getProfilesByUserId(currentUser.getId());
-
+        
         List<ProfileResponseDTO> response = userProfiles.stream()
                 .map(perfil -> new ProfileResponseDTO(perfil.getId(), perfil.getName()))
                 .toList();
