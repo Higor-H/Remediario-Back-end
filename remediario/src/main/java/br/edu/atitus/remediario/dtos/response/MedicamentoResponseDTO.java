@@ -10,18 +10,34 @@ public class MedicamentoResponseDTO {
     private String tipo;
     private Integer quantidade;
     private String descricao;
+    private Integer horario;
 
 
-    public MedicamentoResponseDTO(UUID id, String nome, String dosagem, String tipo, Integer quantidade, String descricao) {
+    public MedicamentoResponseDTO(UUID id, String nome, String dosagem, String tipo, Integer quantidade, String descricao, Integer horario) {
         this.id = id;
         this.nome = nome;
         this.dosagem = dosagem;
         this.tipo = tipo;
         this.quantidade = quantidade;
         this.descricao = descricao;
+        this.horario = horario;
     }
+    
+    
 
-    public UUID getId() {
+    public Integer getHorario() {
+		return horario;
+	}
+
+
+
+	public void setHorario(Integer horario) {
+		this.horario = horario;
+	}
+
+
+
+	public UUID getId() {
         return id;
     }
 

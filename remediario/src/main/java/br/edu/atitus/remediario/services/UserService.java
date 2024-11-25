@@ -29,6 +29,22 @@ public class UserService implements UserDetailsService{
     
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     
+    public String getUserProfileImage(UUID userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            return user.getProfileImage(); // Supondo que o campo `profileImage` armazena a URL da imagem
+        }
+        return null;
+    }
+    
+    public void updateUserProfileImage(UUID userId, String profileImage) {
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+
+        user.setProfileImage(profileImage); // Atualiza o campo da imagem
+        userRepository.save(user); // Salva o usuário com a imagem atualizada
+    }
+    
     public void deleteUser(UUID userId) {
     	perfilService.deleteProfile(userId);
         UserEntity user = userRepository.findById(userId)

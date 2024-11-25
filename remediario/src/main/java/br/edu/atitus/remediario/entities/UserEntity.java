@@ -41,7 +41,18 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String name;
     
-    private UUID currentProfileId;
+    @Column
+    private String profileImage;
+
+	private UUID currentProfileId;
+	
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
 
     @Override
     public String getPassword() {

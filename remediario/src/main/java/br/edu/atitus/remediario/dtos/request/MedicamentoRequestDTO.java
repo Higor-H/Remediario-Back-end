@@ -8,18 +8,30 @@ public class MedicamentoRequestDTO {
     private String tipo;
     private int quantidade;
 	private String descricao;
+	private int horario;
 
     public MedicamentoRequestDTO() {}
 
-    public MedicamentoRequestDTO( String nome, String dosagem, String tipo, int quantidade) {
+    public MedicamentoRequestDTO( String nome, String dosagem, String tipo, int quantidade, int horario) {
         
+    	this.horario = horario;
         this.nome = nome;
         this.dosagem = dosagem;
         this.tipo = tipo;
         this.quantidade = quantidade;
     }
 
-    public String getDescricao() {
+    
+    
+    public int getHorario() {
+		return horario;
+	}
+
+	public void setHorario(int horario) {
+		this.horario = horario;
+	}
+
+	public String getDescricao() {
 		return descricao;
 	}
 

@@ -5,10 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import br.edu.atitus.remediario.dtos.response.ProfileResponseDTO;
 import br.edu.atitus.remediario.entities.ProfileEntity;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.ProfileRepository;

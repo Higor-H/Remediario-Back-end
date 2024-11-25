@@ -36,6 +36,9 @@ public class MedicamentoEntity {
     @Column(nullable = false)
     private String descricao;
     
+    @Column
+    private int horario;
+    
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "perfil_id")
     private ProfileEntity profile;
@@ -43,8 +46,22 @@ public class MedicamentoEntity {
     
     public MedicamentoEntity() {
     }
+    
+    
 
-    public UUID getId() {
+    public int getHorario() {
+		return horario;
+	}
+
+
+
+	public void setHorario(int horario) {
+		this.horario = horario;
+	}
+
+
+
+	public UUID getId() {
         return id;
     }
 

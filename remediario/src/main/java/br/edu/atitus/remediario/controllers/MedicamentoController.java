@@ -56,7 +56,8 @@ public class MedicamentoController {
                         medicamento.getDosagem(),
                         medicamento.getTipo(),
                         medicamento.getQuantidade(),
-                        medicamento.getDescricao()))
+                        medicamento.getDescricao(),
+                        medicamento.getHorario()))
                 .collect(Collectors.toList());
         
         return ResponseEntity.ok(medicamentoDTOs);
@@ -64,16 +65,16 @@ public class MedicamentoController {
     
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/create")
-    public ResponseEntity<String> createMedicamento(@RequestBody MedicamentoRequestDTO medicamentoDto, HttpServletRequest request) {
+    public ResponseEntity<MedicamentoResponseDTO> createMedicamento(@RequestBody MedicamentoRequestDTO medicamentoDto, HttpServletRequest request) {
     	UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (currentUser.getCurrentProfileId() == null) {
-            return ResponseEntity.status(400).body("Nenhum perfil ativo selecionado.");
+            return ResponseEntity.status(400).body(null);
         }
 
         ProfileEntity activeProfile = profileService.getProfileById(currentUser.getCurrentProfileId());
         if (activeProfile == null || !activeProfile.getUser().getId().equals(currentUser.getId())) {
-            return ResponseEntity.status(403).body("Perfil ativo inválido ou não pertence ao usuário.");
+            return ResponseEntity.status(403).body(null);
         }
 
         MedicamentoEntity medicamento = new MedicamentoEntity();
@@ -90,8 +91,17 @@ public class MedicamentoController {
         medicamento.setTipo(medicamentoDto.getTipo());
         medicamento.setQuantidade(medicamentoDto.getQuantidade());
         medicamento.setDescricao(medicamentoDto.getDescricao());
+        medicamento.setHorario(medicamentoDto.getHorario());
         medicamentoService.saveMedicamento(medicamento);
-        return ResponseEntity.ok("medicamento cadastrado");
+        MedicamentoResponseDTO medicamentoDTO = new MedicamentoResponseDTO(
+                    medicamento.getId(),
+                    medicamento.getNome(),
+                    medicamento.getDosagem(),
+                    medicamento.getTipo(),
+                    medicamento.getQuantidade(),
+                    medicamento.getDescricao(),
+                    medicamento.getHorario());
+        return ResponseEntity.ok(medicamentoDTO);
     }
     
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -138,7 +148,8 @@ public class MedicamentoController {
                 medicamento.getDosagem(),
                 medicamento.getTipo(),
                 medicamento.getQuantidade(),
-                medicamento.getDescricao());
+                medicamento.getDescricao(),
+                medicamento.getHorario());
 
         return ResponseEntity.ok(medicamentoDto);
     }
