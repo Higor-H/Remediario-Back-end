@@ -27,12 +27,28 @@ public class ProfileEntity {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    
+    @Column
+    private String bio;
 
     
     public ProfileEntity() {
     }
+    
 
-    public UUID getId() {
+    public String getBio() {
+		return bio;
+	}
+
+
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
+
+
+	public UUID getId() {
         return id;
     }
 

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,34 @@ public class ProfileController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @DeleteMapping("/delete/{profileId}")
+    public ResponseEntity<String> deleteProfile(@PathVariable UUID profileId) {
+        try {
+            UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            
+            if (perfilService.isProfileOwner(profileId, currentUser.getId())) {
+                perfilService.deleteProfileByProfileId(profileId);
+                return ResponseEntity.ok("Perfil deletado com sucesso");
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Não autorizado a excluir esse perfil");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao excluir o perfil: " + e.getMessage());
+        }
+    }
+    
+    @PutMapping("/edit/{profileId}")
+    public ResponseEntity<String> updateProfile(
+            @PathVariable UUID profileId, 
+            @RequestBody ProfileRequestDTO profileRequestDTO) {
+        try {
+            perfilService.updateProfile(profileId, profileRequestDTO.getName(), profileRequestDTO.getBio());
+            return ResponseEntity.ok("Perfil atualizado com sucesso");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body("Erro ao atualizar perfil: " + e.getMessage());
+        }
+    }
     
     @PostMapping("/select/{perfilId}")
     public ResponseEntity<UserEntity> selectProfile(@PathVariable UUID perfilId) {
@@ -53,7 +82,7 @@ public class ProfileController {
         List<ProfileEntity> userProfiles = perfilService.getProfilesByUserId(currentUser.getId());
         
         List<ProfileResponseDTO> response = userProfiles.stream()
-                .map(perfil -> new ProfileResponseDTO(perfil.getId(), perfil.getName()))
+                .map(perfil -> new ProfileResponseDTO(perfil.getId(), perfil.getName(), perfil.getBio()))
                 .toList();
 
         return ResponseEntity.ok(response);
@@ -75,12 +104,15 @@ public class ProfileController {
         }
         ProfileEntity perfilEntity = new ProfileEntity();
         perfilEntity.setName(perfilDto.getName());
+        perfilEntity.setBio(perfilDto.getBio());
         perfilEntity.setUser(user);
+        
         ProfileEntity savedPerfil = perfilService.savePerfil(perfilEntity);
 
-        ProfileResponseDTO responseDto = new ProfileResponseDTO(perfilEntity.getId(), perfilEntity.getName());
+        ProfileResponseDTO responseDto = new ProfileResponseDTO(perfilEntity.getId(), perfilEntity.getName(), perfilEntity.getBio());
         responseDto.setId(savedPerfil.getId());
         responseDto.setName(savedPerfil.getName());
+        responseDto.setBio(savedPerfil.getBio());
 
         return ResponseEntity.ok(responseDto);
     }

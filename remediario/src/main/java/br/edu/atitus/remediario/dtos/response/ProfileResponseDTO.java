@@ -6,13 +6,27 @@ public class ProfileResponseDTO {
 	
 	private UUID id;
     private String name;
+    private String bio;
 
-    public ProfileResponseDTO(UUID id, String name) {
+    public ProfileResponseDTO(UUID id, String name, String bio) {
         this.id = id;
         this.name = name;
+        this.bio = bio;
     }
+    
+    
 
-    // Getters e Setters
+    public String getBio() {
+		return bio;
+	}
+
+
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
+
     public UUID getId() {
         return id;
     }

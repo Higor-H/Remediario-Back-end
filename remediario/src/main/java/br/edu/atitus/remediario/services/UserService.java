@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService{
     }
     
     public void deleteUser(UUID userId) {
-    	perfilService.deleteProfile(userId);
+    	perfilService.deleteProfileByUserId(userId);
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o ID: " + userId));
         userRepository.delete(user);

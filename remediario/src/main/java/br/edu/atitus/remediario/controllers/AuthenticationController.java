@@ -1,8 +1,5 @@
 package br.edu.atitus.remediario.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 
-import com.google.api.client.util.Value;
-import java.nio.file.Files;
-
 import br.edu.atitus.remediario.dtos.request.AuthenticationRequestDTO;
 import br.edu.atitus.remediario.dtos.request.RegisterRequestDTO;
 import br.edu.atitus.remediario.dtos.response.LoginResponseDTO;
@@ -35,9 +29,6 @@ import br.edu.atitus.remediario.repositories.UserRepository;
 import br.edu.atitus.remediario.security.TokenService;
 import br.edu.atitus.remediario.services.CloudinaryService;
 import br.edu.atitus.remediario.services.UserService;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 
@@ -55,10 +46,10 @@ public class AuthenticationController {
     private AuthenticationConfiguration auth;
     @Autowired
     private CloudinaryService cloudinaryService;
-    
+     
     @GetMapping("/{userId}/profile-image")
     public ResponseEntity<String> getProfileImage(@PathVariable UUID userId) {
-        String imageUrl = userService.getUserProfileImage(userId); // Método que retorna a URL do banco
+        String imageUrl = userService.getUserProfileImage(userId);
 
         if (imageUrl == null) {
             return ResponseEntity.status(404).body("Imagem de perfil não encontrada.");
@@ -66,7 +57,6 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(imageUrl);
     }
-
 
     @PostMapping("/{userId}/upload-image")
     public ResponseEntity<String> uploadProfileImage(@PathVariable UUID userId, @RequestParam("file") MultipartFile file) {
@@ -98,7 +88,8 @@ public class AuthenticationController {
     	var user = userService.loadUserByUsername(authenticationRequestDTO.email());
   
         String token = tokenService.generateToken((UserEntity) user);
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        String userId = tokenService.getUserIdFromToken(token);
+        return ResponseEntity.ok(new LoginResponseDTO(token, userId));
     }
 
     @PostMapping("/register")

@@ -46,6 +46,7 @@ public class UserEntity implements UserDetails {
 
 	private UUID currentProfileId;
 	
+
 	public String getProfileImage() {
 		return profileImage;
 	}

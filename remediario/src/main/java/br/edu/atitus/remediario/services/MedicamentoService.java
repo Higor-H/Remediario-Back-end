@@ -28,7 +28,7 @@ public class MedicamentoService {
         return medicamentoRepository.save(medicamento);
     }
     
-    public int deleteMedicamento(UUID perfilId) {
+    public int deleteMedicamentoByPerfilId(UUID perfilId) {
     	List<MedicamentoEntity> medicamentos = getMedicamentosByProfileId(perfilId);
     	for (MedicamentoEntity loop : medicamentos) {
     		medicamentoRepository.delete(medicamentos.get(indice));
