@@ -46,6 +46,7 @@ public class AuthenticationController {
     private AuthenticationConfiguration auth;
     @Autowired
     private CloudinaryService cloudinaryService;
+    
      
     @GetMapping("/{userId}/profile-image")
     public ResponseEntity<String> getProfileImage(@PathVariable UUID userId) {
@@ -69,7 +70,7 @@ public class AuthenticationController {
             String fileUrl = cloudinaryService.uploadFile(file.getBytes(), fileName);
 
             userService.updateUserProfileImage(userId, fileUrl);
-            return ResponseEntity.ok("Imagem carregada com sucesso: " + fileUrl);
+            return ResponseEntity.ok("Imagem carregada com sucesso");
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar a imagem.");
@@ -80,17 +81,26 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationRequestDTO authenticationRequestDTO) {
-    	try {
-			auth.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(authenticationRequestDTO.email(), authenticationRequestDTO.password()));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-		}
-    	var user = userService.loadUserByUsername(authenticationRequestDTO.email());
-  
+        try {
+            auth.getAuthenticationManager().authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    authenticationRequestDTO.email(),
+                    authenticationRequestDTO.password()
+                )
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        var user = userService.loadUserByUsername(authenticationRequestDTO.email());
+
         String token = tokenService.generateToken((UserEntity) user);
         String userId = tokenService.getUserIdFromToken(token);
-        return ResponseEntity.ok(new LoginResponseDTO(token, userId));
+        String email = authenticationRequestDTO.email(); // O email já está disponível aqui
+
+        return ResponseEntity.ok(new LoginResponseDTO(token, userId, email));
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {

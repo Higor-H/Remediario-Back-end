@@ -2,6 +2,7 @@ package br.edu.atitus.remediario.controllers;
 
 import br.edu.atitus.remediario.dtos.request.ProfileRequestDTO;
 import br.edu.atitus.remediario.dtos.response.ProfileResponseDTO;
+import br.edu.atitus.remediario.dtos.response.SelectedProfileResponseDTO;
 import br.edu.atitus.remediario.entities.ProfileEntity;
 import br.edu.atitus.remediario.entities.UserEntity;
 import br.edu.atitus.remediario.repositories.UserRepository;
@@ -61,7 +62,7 @@ public class ProfileController {
     }
     
     @PostMapping("/select/{perfilId}")
-    public ResponseEntity<UserEntity> selectProfile(@PathVariable UUID perfilId) {
+    public ResponseEntity<Object> selectProfile(@PathVariable UUID perfilId) {
         UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         ProfileEntity selectedProfile = perfilService.getProfileById(perfilId);
@@ -71,8 +72,9 @@ public class ProfileController {
 
         currentUser.setCurrentProfileId(perfilId);
         userRepository.save(currentUser);
-
-        return ResponseEntity.ok(currentUser);
+        SelectedProfileResponseDTO responseDto = new SelectedProfileResponseDTO(selectedProfile.getName(),selectedProfile.getId().toString());
+        
+        return ResponseEntity.ok(responseDto);
     }
     
     @PreAuthorize("isAuthenticated()")
