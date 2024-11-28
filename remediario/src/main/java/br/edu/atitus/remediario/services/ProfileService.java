@@ -57,14 +57,12 @@ public class ProfileService {
         return optionalProfile.orElse(null);
     }
     
-    public int deleteProfileByUserId(UUID userId) {
+    public void deleteProfileByUserId(UUID userId) {
     	List<ProfileEntity> userProfiles = getProfilesByUserId(userId);
-    	for (ProfileEntity loop : userProfiles) {
-    		medicamentoService.deleteMedicamentoByPerfilId(userProfiles.get(indice).getId());
-    		profileRepository.delete(userProfiles.get(indice));
-    		indice = indice+1;
+    	for (ProfileEntity userProfile : userProfiles) {
+    		medicamentoService.deleteMedicamentoByPerfilId(userProfile.getId());
+    		profileRepository.delete(userProfile);
     	}
-    	return indice = 0;
     }
     
     public void deleteProfileByProfileId(UUID profileId) {
